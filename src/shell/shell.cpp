@@ -13,6 +13,10 @@ static void emitCommand(shell_command_id_t command,
     const char* args = "")
 {
 shell_command_event_data_t data = { command, args };
+
+std::printf("\r\n[DEBUG] Emitting command ID = %d\r\n",
+    (int)command);
+
 event_emit(EVENT_COMMAND, &data);
 }
 
@@ -116,6 +120,36 @@ static void handle_taskList(Shell&, const char*)
     emitCommand(SHELL_CMD_TASK_LIST);
 }
 
+static void handle_ls(Shell&, const char* args)
+{
+    emitCommand(SHELL_CMD_FS_LS, args);
+}
+
+static void handle_cat(Shell&, const char* args)
+{
+    emitCommand(SHELL_CMD_FS_CAT, args);
+}
+
+static void handle_write(Shell&, const char* args)
+{
+    emitCommand(SHELL_CMD_FS_WRITE, args);
+}
+
+static void handle_rm(Shell&, const char* args)
+{
+    emitCommand(SHELL_CMD_FS_RM, args);
+}
+
+static void handle_df(Shell&, const char* args)
+{
+    emitCommand(SHELL_CMD_FS_DF, args);
+}
+
+static void handle_run(Shell&, const char* args)
+{
+    emitCommand(SHELL_CMD_FS_RUN, args);
+}
+
 
 const Shell::Command Shell::commands[] = {
     {"help",    "Show this help",          handle_help},
@@ -131,6 +165,12 @@ const Shell::Command Shell::commands[] = {
     {"morse",   "Send text using Morse",   handle_morse},
     {"mem",     "Show memory information", handle_mem},
     {"diag",    "System diagnostics",      handle_diag},
+    {"ls",    "List files",             handle_ls},
+    {"cat",   "Display file contents",  handle_cat},
+    {"write", "Write text to file",     handle_write},
+    {"rm",    "Remove file",            handle_rm},
+    {"df",    "Show storage devices",   handle_df},
+    {"run",   "Run MiniScript file",    handle_run},
     {"reboot",  "Reboot system",           handle_reboot},
     {"taskTest","Test Task",               handle_taskTest},
     {"taskList","List Tasks",               handle_taskList},

@@ -23,7 +23,15 @@ typedef enum
     SHELL_CMD_TASK_LIST,
     SHELL_CMD_TASK_STOP,
     SHELL_CMD_TASK_START,
-    SHELL_CMD_TASK_Remove
+    SHELL_CMD_TASK_Remove,
+
+    /* File system */
+    SHELL_CMD_FS_LS,
+    SHELL_CMD_FS_CAT,
+    SHELL_CMD_FS_WRITE,
+    SHELL_CMD_FS_RM,
+    SHELL_CMD_FS_DF,
+    SHELL_CMD_FS_RUN
 } shell_command_id_t;
 
 typedef struct

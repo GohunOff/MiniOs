@@ -14,6 +14,8 @@
 
 #include "system/core.h"
 
+#include "filesystem/fs_commands.h"
+
 #define LED_PIN 25
 
 static void command_led(bool state)
@@ -76,14 +78,52 @@ static void command_task_list(void)
 
 static void on_shell_command(const event_t *event)
 {
-    if (event == NULL || event->data == NULL)
+    if (event == NULL || event->data == NULL) {
+        printf("\r\n[DEBUG] Event or data is NULL\r\n");
         return;
+    }
 
     const shell_command_event_data_t *data =
         (const shell_command_event_data_t *)event->data;
 
+    printf("\r\n[DEBUG] command ID = %d\r\n",
+            (int)data->command);
+
     switch (data->command)
     {
+        
+        case SHELL_CMD_FS_LS:
+        printf("\r\n[FS] ls: args='%s'\r\n",
+               data->args ? data->args : "");
+        fs_command_ls(data->args);
+        break;
+
+    case SHELL_CMD_FS_CAT:
+        printf("\r\n[FS] cat: args='%s'\r\n",
+               data->args ? data->args : "");
+        fs_command_cat(data->args);
+        break;
+
+    case SHELL_CMD_FS_DF:
+        printf("\r\n[FS] df: args='%s'\r\n",
+               data->args ? data->args : "");
+        fs_command_df(data->args);
+        break;
+
+    case SHELL_CMD_FS_WRITE:
+        printf("\r\nwrite: not implemented yet.\r\n");
+        break;
+
+    case SHELL_CMD_FS_RM:
+        printf("\r\nrm: not implemented yet.\r\n");
+        break;
+
+    case SHELL_CMD_FS_RUN:
+        printf("\r\nrun: MiniScript interpreter not implemented yet.\r\n");
+        break;
+        
+
+
         case SHELL_CMD_INFO:
             command_info();
             break;
@@ -169,4 +209,6 @@ void shell_command_handlers_init(void)
 
     event_register(EVENT_COMMAND, on_shell_command);
     morse_init(LED_PIN);
+
+    fs_commands_init();
 }
